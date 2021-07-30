@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      th:replace="user/base::layout(~{::section})">
+<head>
+    <meta charset="UTF-8"/>
+    <title th:text="${title}"></title>
+</head>
+<body>
+<section>
+    <div class="card mr-3">
+        <h1>Your contacts</h1>
+
+        <div class="card-body">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">SL</th>
+                    <th scope="col">Id</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Phone</th>
+                    <th scope="col">Work</th>
+                    <th scope="col">Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="c,index : ${contacts}">
+                    <td scope="row" th:text=${index.count}></td>
+                    <td th:text=${'CSE'+c.id}></td>
+                    <image></image>
+                    <td th:text="${c.firstName+' '+c.lastName}"></td>
+                    <td th:text="${c.email}"></td>
+                    <td th:text="${c.phoneNumber}"></td>
+                    <td th:text="${c.work}"></td>
+                    <td>
+                        <button class="btn btn-primary btn-sm">Edit</button>
+                        <button class="btn btn-danger btn-sm">Delete</button>
+                    </td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(contacts)}">
+                    <td>No data found...</td>
+                </tr>
+
+                </tbody>
+            </table>
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-end">
+                    <li th:if="${currentPage !=0}" class="page-item">
+                        <a th:href="@{'/user/contact/index/'+${currentPage-1}}" class="page-link" href="#" tabindex="-1">Previous</a>
+                    </li>
+                    <li th:classappend="${currentPage==i-1? 'active' : ''}"
+                        th:each="i:${#numbers.sequence(1,totalPages)}" class="page-item">
+                        <a th:href="@{'/user/contact/index/'+${i-1}}" class="page-link" href="#"><span th:text="${i}"></span></a></li>
+                    <li th:if="${currentPage+1 !=totalPages}" class="page-item">
+                        <a th:href="@{'/user/contact/index/'+${currentPage+1}}" class="page-link" href="#">Next</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</section>
+</body>
+</html>
