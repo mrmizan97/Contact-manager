@@ -10,6 +10,6 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface ContactRepository extends JpaRepository<Contact,Integer> {
-    @Query("from Contact as c where c.user.id=:userId")
+    @Query("from Contact as c where c.user.id=:userId order by id desc")
     public Page<Contact> findContactsByUser(@Param("userId") int userId, Pageable pageable);
 }

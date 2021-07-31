@@ -64,4 +64,9 @@ body {
 .content{
   margin-left:17%;
 }
+.contact_img{
+width:30px ;
+height:30px;
+object-fit:covered;
+}
 /* end sidebar */

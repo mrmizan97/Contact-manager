@@ -50,7 +50,7 @@ public class HomeController {
                              HttpSession httpSession) {
         try {
             if (!agreement) {
-                System.out.println("You have not agreed the terms and condition");
+//                System.out.println("You have not agreed the terms and condition");
                 throw new Exception("You have not agreed the terms and condition");
             }
             if (bindingResult.hasErrors()) {

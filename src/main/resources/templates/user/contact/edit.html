@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      th:replace="user/base::layout(~{::section})">
+<head>
+  <meta charset="UTF-8"/>
+  <title th:text="${title}"></title>
+</head>
+<body>
+<section>
+  <div class="card">
+    <div>
+      <h3 class="text-center">Add contact</h3>
+      <a class="btn btn-primary btn-sm" href="#" th:href="@{'/user/contact/index/0'}">Contact
+        list</a>
+    </div>
+    <div class="card-body">
+
+      <div class="container-fluid mt-1">
+        <div class="col-md-8 offset-md-2">
+          <form action="#" th:action="@{/user/contact/store}" method="post"
+                th:object="${contact}" enctype="multipart/form-data">
+            <div class="form-group">
+              <label for="firstName">First Name</label>
+              <input type="text" name="firstName" id="firstName" th:value="${contact.firstName}"
+                     class="form-control" placeholder="Enter firstname"
+                     th:classappend="${#fields.hasErrors('firstName')}? 'is-invalid' : ''"
+              >
+              <div th:each="e : ${#fields.errors('firstName')}" th:text="${e}"
+                   class="invalid-feedback"></div>
+            </div>
+            <!--                        <div class="form-group">-->
+            <!--                            <label for="name">User Name</label>-->
+            <!--                            <input type="text"-->
+            <!--                                   name="name" id="name" th:value="${user.name}"-->
+            <!--                                   class="form-control" placeholder="Enter name"-->
+            <!--                                   th:classappend="${#fields.hasErrors('name')}? 'is-invalid' : ''"-->
+            <!--                            >-->
+            <!--                            <div th:each="e : ${#fields.errors('name')}" th:text="${e}"-->
+            <!--                                 class="invalid-feedback"></div>-->
+            <!--                        </div>-->
+            <div class="form-group">
+              <label for="lastName">Last Name</label>
+              <input type="text" name="lastName" id="lastName" th:value="${contact.lastName}"
+                     class="form-control" placeholder="Enter lastname"
+                     th:classappend="${#fields.hasErrors('lastName')}? 'is-invalid' : ''"
+              >
+              <div th:each="e : ${#fields.errors('lastName')}" th:text="${e}"
+                   class="invalid-feedback"></div>
+            </div>
+            <div class="form-group">
+              <label for="email">Email Address</label>
+              <input type="email" name="email" id="email" th:value="${contact.email}"
+                     class="form-control" placeholder="Enter email address"
+                     th:classappend="${#fields.hasErrors('email')}? 'is-invalid' : ''">
+
+              <div th:each="e : ${#fields.errors('email')}" th:text="${e}"
+                   class="invalid-feedback"></div>
+            </div>
+            <div class="form-group">
+              <label for="phoneNumber">Phone Number</label>
+              <input type="text" name="phoneNumber" id="phoneNumber" th:value="${contact.phoneNumber}"
+                     class="form-control" placeholder="Enter phone number"
+                     th:classappend="${#fields.hasErrors('phoneNumber')}? 'is-invalid' : ''"
+              >
+              <div th:each="e : ${#fields.errors('phoneNumber')}" th:text="${e}"
+                   class="invalid-feedback"></div>
+            </div>
+            <div class="form-group">
+              <label for="work">Profession</label>
+              <input type="text" name="work" id="work" th:value="${contact.work}"
+                     class="form-control" placeholder="Enter profession"
+                     th:classappend="${#fields.hasErrors('work')}? 'is-invalid' : ''"
+              >
+              <div th:each="e : ${#fields.errors('work')}" th:text="${e}"
+                   class="invalid-feedback"></div>
+            </div>
+            <div class="form-group">
+              <label for="image">Image</label>
+              <input type="file" name="profileImage" id="image"
+                     accept="image/png, image/jpg,image/jpeg" class="form-control"
+                     th:value="${contact.image}"
+                     th:classappend="${#fields.hasErrors('image')}? 'is-invalid' : ''"
+              >
+              <div th:each="e : ${#fields.errors('image')}" th:text="${e}"
+                   class="invalid-feedback"></div>
+            </div>
+            <div class="form-group">
+              <label for="description">Description</label>
+              <textarea name="description" id="description"
+                        th:value="${contact.description}"
+                        class="form-control" placeholder="Enter description"
+                        th:classappend="${#fields.hasErrors('description')}? 'is-invalid' : ''"
+              ></textarea>
+              <div th:each="e : ${#fields.errors('description')}" th:text="${e}"
+                   class="invalid-feedback"></div>
+            </div>
+            <!--                            <div class="form-group form-check">-->
+            <!--                                <input type="checkbox" name="agreement" id="agreement"-->
+            <!--                                       class="form-check-input"> <label-->
+            <!--                                    class="form-check-label" for="agreement">Accept terms &-->
+            <!--                                condition</label>-->
+            <!--                            </div>-->
+            <div class="containter text-center">
+              <button type="submit" class="btn btn-primary">Submit</button>
+              <button type="reset" class="btn btn-warning">Reset</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+  <script>
+      tinymce.init({
+        selector: '#description'
+      });
+    </script>
+</section>
+</body>
+</html>

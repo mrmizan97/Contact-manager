@@ -3,6 +3,7 @@ package com.main.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "contact")
@@ -11,12 +12,16 @@ public class Contact {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
+	@Column(nullable = false)
 	private String firstName;
+	@Column(nullable = false)
 	private String lastName;
+	@NotNull
 	private String email;
+	@NotNull
 	private String phoneNumber;
 	private String work;
-	@Column(nullable = true, length = 64)
+	@Column(nullable = false, length = 64)
 	private String image;
 	@Column(length = 2000)
 	private String description;

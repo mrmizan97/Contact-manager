@@ -9,13 +9,14 @@
 <body>
 <section>
     <div class="card mr-3">
-        <h1>Your contacts</h1>
-
+        <div><h3 class="text-center">Your contacts</h3>
+            <a class="btn btn-primary btn-sm" href="#" th:href="@{'/user/contact/create'}">Add contact</a>
+        </div>
         <div class="card-body">
             <table class="table">
                 <thead>
                 <tr>
-                    <th scope="col">SL</th>
+                    <!--                    <th scope="col">SL</th>-->
                     <th scope="col">Id</th>
                     <th scope="col">Name</th>
                     <th scope="col">Email</th>
@@ -26,16 +27,20 @@
                 </thead>
                 <tbody>
                 <tr th:each="c,index : ${contacts}">
-                    <td scope="row" th:text=${index.count}></td>
-                    <td th:text=${'CSE'+c.id}></td>
-                    <image></image>
-                    <td th:text="${c.firstName+' '+c.lastName}"></td>
+                    <!--                    <td scope="row" th:text=${index.count}></td>-->
+                    <td scope="row" th:text=${'CSE'+c.id}></td>
+                    <td>
+                        <img src="" class="contact_img" th:src="@{'/img/'+${c.image}}"></img>
+                        <span th:text="${c.firstName+' '+c.lastName}"></span>
+
+                    </td>
                     <td th:text="${c.email}"></td>
                     <td th:text="${c.phoneNumber}"></td>
                     <td th:text="${c.work}"></td>
                     <td>
-                        <button class="btn btn-primary btn-sm">Edit</button>
-                        <button class="btn btn-danger btn-sm">Delete</button>
+                                 <a class="btn btn-primary btn-sm" href="#" th:href="@{'/user/contact/view/'+${c.id}}">View</a>
+                        <a class="btn btn-warning btn-sm"  href="#" th:href="@{'/user/contact/edit/'+${c.id}}">Edit</a>
+                        <a class="btn btn-danger btn-sm" onclick="confirm('Are you sure to delete this??')" href="#" th:href="@{'/user/contact/delete/'+${c.id}}">Delete</a>
                     </td>
                 </tr>
                 <tr th:if="${#lists.isEmpty(contacts)}">
@@ -47,11 +52,13 @@
             <nav aria-label="Page navigation example">
                 <ul class="pagination justify-content-end">
                     <li th:if="${currentPage !=0}" class="page-item">
-                        <a th:href="@{'/user/contact/index/'+${currentPage-1}}" class="page-link" href="#" tabindex="-1">Previous</a>
+                        <a th:href="@{'/user/contact/index/'+${currentPage-1}}" class="page-link" href="#"
+                           tabindex="-1">Previous</a>
                     </li>
                     <li th:classappend="${currentPage==i-1? 'active' : ''}"
                         th:each="i:${#numbers.sequence(1,totalPages)}" class="page-item">
-                        <a th:href="@{'/user/contact/index/'+${i-1}}" class="page-link" href="#"><span th:text="${i}"></span></a></li>
+                        <a th:href="@{'/user/contact/index/'+${i-1}}" class="page-link" href="#"><span
+                                th:text="${i}"></span></a></li>
                     <li th:if="${currentPage+1 !=totalPages}" class="page-item">
                         <a th:href="@{'/user/contact/index/'+${currentPage+1}}" class="page-link" href="#">Next</a>
                     </li>
