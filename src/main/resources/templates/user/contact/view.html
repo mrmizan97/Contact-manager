@@ -14,17 +14,17 @@
         </div>
         <div class="card-body" >
             <div class="container text-center">
-                <img src="" style="height:200px; width:300px;" th:src="@{'/img/'+${contact.image}}"></img>
+                <img src="" style="height:200px; width:300px;" th:src="@{'/img/'+${user.image}}"></img>
                 <div>
                     <a class="btn btn-warning btn-sm"  href="#" th:href="@{'/user/contact/edit/'+${contact.id}}">Edit</a>
-                    <a class="btn btn-danger btn-sm" onclick="confirm('Are you sure to delete this??')" href="#" th:href="@{'/user/contact/delete/'+${contact.id}}">Delete</a>
+<!--                    <a class="btn btn-danger btn-sm" onclick="confirm('Are you sure to delete this??')" href="#" th:href="@{'/user/contact/delete/'+${contact.id}}">Delete</a>-->
                 </div>
                 <h3 th:text="${contact.firstName+' '+contact.lastName}"></h3>
                 <table class="table">
                     <thead>
                     <tr>
                         <th scope="col">#ID</th>
-                        <th scope="col"><span th:text="${'CSE'+contact.id}"></span></th>
+                        <th scope="col"><span th:text="${user.id}"></span></th>
 
                     </tr>
                     </thead>
@@ -38,8 +38,8 @@
                         <td><span th:text="${contact.phoneNumber}"></span></td>
                     </tr>
                     <tr>
-                        <th scope="row">Profession</th>
-                        <td><span th:text="${contact.work}"></span></td>
+                        <th scope="row">Status</th>
+                        <td><span th:text="${user.enabled}"></span></td>
                     </tr>
                     </tbody>
                 </table>

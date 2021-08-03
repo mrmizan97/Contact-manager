@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -38,7 +39,7 @@ public class ContactController {
     @ModelAttribute
     public void commonData(Model model, Principal principal) {
         String username = principal.getName();
-        User user = userRepository.getUserByUserName(username);
+        User user = this.userRepository.getUserByUserName(username);
 //        System.out.println(user);
         model.addAttribute("user", user);
     }
@@ -47,6 +48,22 @@ public class ContactController {
     public String dashboard(Model model, Principal principal) {
         model.addAttribute("title", "User Dashboard");
         return "user/dashboard";
+    }
+
+    // per page =5[n]
+    // current page=0[page]
+    @GetMapping("contact/index/{page}")
+    public String showContacts(@PathVariable("page") int page, Model model, Principal principal) {
+        model.addAttribute("title", "All contacts");
+        String userName = principal.getName();
+        User user = this.userRepository.getUserByUserName(userName);
+        PageRequest pageable = PageRequest.of(page, 5);
+
+        Page<Contact> contacts = this.contactRepository.findContactsByUser(user.getId(), pageable);
+        model.addAttribute("contacts", contacts);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", contacts.getTotalPages());
+        return "user/contact/index";
     }
 
     @GetMapping("contact/create")
@@ -77,7 +94,7 @@ public class ContactController {
                 File saveFile = new ClassPathResource("static/img").getFile();
                 Path path = Paths.get(saveFile.getAbsolutePath() + File.separator + file.getOriginalFilename());
                 Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
-                System.out.println("Image is uploaded...");
+//                System.out.println("Image is uploaded...");
             }
             String name = principal.getName();
             User user = this.userRepository.getUserByUserName(name);
@@ -93,22 +110,6 @@ public class ContactController {
         return "redirect:/user/contact/index/0";
     }
 
-    // per page =5[n]
-    // current page=0[page]
-    @GetMapping("contact/index/{page}")
-    public String showContacts(@PathVariable("page") int page, Model model, Principal principal) {
-        model.addAttribute("title", "All contacts");
-        String userName = principal.getName();
-        User user = this.userRepository.getUserByUserName(userName);
-        PageRequest pageable = PageRequest.of(page, 5);
-
-        Page<Contact> contacts = this.contactRepository.findContactsByUser(user.getId(), pageable);
-        model.addAttribute("contacts", contacts);
-        model.addAttribute("currentPage", page);
-        model.addAttribute("totalPages", contacts.getTotalPages());
-        return "user/contact/index";
-    }
-
     // view contact
     @GetMapping("contact/view/{id}")
     public String viewContact(@PathVariable("id") Integer id, Principal principal, Model model) {
@@ -122,22 +123,7 @@ public class ContactController {
         }
         return "user/contact/view";
     }
-
-    @GetMapping("contact/delete/{id}")
-    public String deleteContact(@PathVariable("id") Integer id, Principal principal, Model model, HttpSession session) {
-        Contact contact = this.contactRepository.findById(id).get();
-        String userName = principal.getName();
-        User user = this.userRepository.getUserByUserName(userName);
-        if (user.getId() == contact.getUser().getId()) {
-            this.contactRepository.delete(contact);
-            contact.setUser(null);
-            session.setAttribute("message", new Message("Data deleted.", "success"));
-        } else {
-            session.setAttribute("message", new Message("You don't have permission to delete this.", "danger"));
-        }
-        return "redirect:/user/contact/index/0";
-    }
-
+    // edit contact
     @GetMapping("contact/edit/{id}")
     public String editContact(@PathVariable("id") Integer id, Principal principal, Model model, HttpSession session) {
         Contact contact = this.contactRepository.findById(id).get();
@@ -150,7 +136,57 @@ public class ContactController {
             return "redirect:/user/contact/index/0";
         }
         return "user/contact/edit";
-
     }
+    // update contact
+    @PostMapping("contact/update")
+    public String updateContact(@ModelAttribute Contact contact,@RequestParam("profileImage")
+            MultipartFile file,HttpSession session,Model model,Principal principal){
+        try{
+            Contact oldContact = this.contactRepository.findById(contact.getId()).get();
+            if (!file.isEmpty()){
+                // delete old photo
+                File oldPhoto = new ClassPathResource("static/img").getFile();
+                File deleteFile = new File(oldPhoto, oldContact.getImage());
+                deleteFile.delete();
+                // update new photo
+                File saveFile = new ClassPathResource("static/img").getFile();
+                Path path = Paths.get(saveFile.getAbsolutePath() + File.separator + file.getOriginalFilename());
+                Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+                contact.setImage(file.getOriginalFilename());
+            }else {
+                contact.setImage(oldContact.getImage());
+            }
+            String name = principal.getName();
+            User user = this.userRepository.getUserByUserName(name);
+            contact.setUser(user);
+            this.contactRepository.save(contact);
+            session.setAttribute("message", new Message("Data updated.", "success"));
+        }catch (Exception e){
+            System.out.println("ERROR"+e.getMessage());
+            e.printStackTrace();
+            session.setAttribute("message", new Message("Something went wrong.", "danger"));
+        }
+        return "redirect:/user/contact/index/0";
+    }
+// delete contact
+    @GetMapping("contact/delete/{id}")
+    public String deleteContact(@PathVariable("id") Integer id, Principal principal, Model model, HttpSession session) throws IOException {
+        Contact contact = this.contactRepository.findById(id).get();
+        String userName = principal.getName();
+        User user = this.userRepository.getUserByUserName(userName);
+        if (user.getId() == contact.getUser().getId()) {
+            // delete old photo
+            File oldPhoto = new ClassPathResource("static/img").getFile();
+            File deleteFile = new File(oldPhoto, contact.getImage());
+            deleteFile.delete();
+            this.contactRepository.delete(contact);
+            contact.setUser(null);
+            session.setAttribute("message", new Message("Data deleted.", "success"));
+        } else {
+            session.setAttribute("message", new Message("You don't have permission to delete this.", "danger"));
+        }
+        return "redirect:/user/contact/index/0";
+    }
+
 
 }

@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      th:replace="user/base::layout(~{::section})">
+<head>
+  <meta charset="UTF-8"/>
+  <title th:text="${title}"></title>
+</head>
+<body>
+<section>
+  <div class="card mr-3">
+    <div><h3 class="text-center">View profile</h3>
+<!--      <a class="btn btn-primary btn-sm" href="#" th:href="@{'/user/contact/index/0'}">Contact list</a>-->
+    </div>
+    <div class="card-body" >
+      <div class="container text-center">
+        <img src="" style="height:200px; width:300px;" th:src="@{'/img/'+${user.image}}"></img>
+        <div>
+          <a class="btn btn-warning btn-sm"  href="#" th:href="@{'/user/profile/edit/'+${user.id}}">Edit</a>
+<!--          <a class="btn btn-danger btn-sm" onclick="confirm('Are you sure to delete this??')" href="#" th:href="@{'/user/contact/delete/'+${contact.id}}">Delete</a>-->
+        </div>
+        <h3 th:text="${user.name}"></h3>
+        <table class="table">
+          <thead>
+          <tr>
+            <th scope="col">#ID</th>
+            <th scope="col"><span th:text="${'CSE'+user.id}"></span></th>
+
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <th scope="row">Email</th>
+            <td><span th:text="${user.email}"></span></td>
+          </tr>
+          <tr>
+            <th scope="row"> Role</th>
+            <td><span th:text="${user.role}"></span></td>
+          </tr>
+          <tr>
+            <th scope="row">Status</th>
+            <td><span th:text="${user.enabled}"></span></td>
+          </tr>
+          </tbody>
+        </table>
+        <p>About:<span th:utext="${user.description}"></span></p>
+
+      </div>
+    </div>
+  </div>
+<!--  <div class="text-danger" th:unless="${user}">You don't have permission to see this user...</div>-->
+</section>
+</body>
+</html>

@@ -60,7 +60,7 @@ body {
      right:35px;
      font-size:35px;
      cursor:pointer;
- }
+ }/* end sidebar */
 .content{
   margin-left:17%;
 }
@@ -69,4 +69,14 @@ width:30px ;
 height:30px;
 object-fit:covered;
 }
-/* end sidebar */
+.search_container{
+position:relative;
+}.search_result{
+position:absolute;
+background:white;
+width:100%;
+padding:5px;
+border:1px solid gray;
+display:none;
+}
+

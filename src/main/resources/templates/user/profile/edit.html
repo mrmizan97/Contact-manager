@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      th:replace="user/base::layout(~{::section})">
+<head>
+  <meta charset="UTF-8"/>
+  <title th:text="${title}"></title>
+</head>
+<body>
+<section>
+  <div class="card">
+    <div>
+      <h3 class="text-center">Add contact</h3>
+      <a class="btn btn-primary btn-sm" href="#" th:href="@{'/user/contact/index/0'}">Contact
+        list</a>
+    </div>
+    <div class="card-body">
+
+      <div class="container-fluid mt-1">
+        <div class="col-md-8 offset-md-2">
+          <form  th:action="@{/user/profile/update}" method="post" th:object="${user}" enctype="multipart/form-data">
+            <div class="form-group">
+              <input type="hidden" name="id" th:value="${user.id}">
+              <label for="name">User Name</label>
+              <input type="text"
+                     name="name" id="name" th:value="${user.name}"
+                     class="form-control" placeholder="Enter name"
+                     th:classappend="${#fields.hasErrors('name')}? 'is-invalid' : ''"
+              >
+              <div th:each="e : ${#fields.errors('name')}" th:text="${e}"
+                   class="invalid-feedback"></div>
+            </div>
+            <div class="form-group">
+              <label for="email">User Email</label> <input type="email"
+                                                           name="email" id="email" th:value="${user.email}"
+                                                           class="form-control"
+                                                           placeholder="Enter email"
+                                                           th:classappend="${#fields.hasErrors('email')}? 'is-invalid' : ''"
+            >
+              <div th:each="e : ${#fields.errors('email')}" th:text="${e}"
+                   class="invalid-feedback"></div>
+
+            </div>
+<!--            <div class="form-group">-->
+<!--              <label for="password">Password</label> <input type="password"-->
+<!--                                                            name="password" id="password"-->
+<!--                                                            th:value="${user.password}"-->
+<!--                                                            class="form-control" placeholder="Enter password"-->
+<!--                                                            th:classappend="${#fields.hasErrors('password')}? 'is-invalid' : ''"-->
+<!--            >-->
+<!--              <div th:each="e : ${#fields.errors('password')}" th:text="${e}"-->
+<!--                   class="invalid-feedback"></div>-->
+<!--            </div>-->
+            <div class="container">
+              <img src="" style="height:100px;width:100px;" th:src="@{'/img/'+${user.image}}"></img>
+            </div>
+            <div class="form-group">
+              <label for="image">Image</label>
+              <input type="file" name="profileImage" id="image"
+                     accept="image/png, image/jpg,image/jpeg" class="form-control"
+                     th:value="${user.image}"
+                     th:classappend="${#fields.hasErrors('image')}? 'is-invalid' : ''"
+              >
+              <div th:each="e : ${#fields.errors('image')}" th:text="${e}"
+                   class="invalid-feedback"></div>
+            </div>
+            <div class="form-group">
+              <label for="description">Description</label>
+              <textarea name="description" id="description"
+                        th:text="${user.description}" class="form-control"
+                        placeholder="Enter something about yourself" cols="10" rows="7"></textarea>
+            </div>
+
+            <div class="containter text-center">
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+  <script>
+      tinymce.init({
+        selector: '#description'
+      });
+    </script>
+</section>
+</body>
+</html>

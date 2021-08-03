@@ -18,8 +18,9 @@
 
       <div class="container-fluid mt-1">
         <div class="col-md-8 offset-md-2">
-          <form action="#" th:action="@{/user/contact/store}" method="post"
+          <form action="#" th:action="@{/user/contact/update}" method="post"
                 th:object="${contact}" enctype="multipart/form-data">
+          <input type="hidden" th:value="${contact.id}" name="id">
             <div class="form-group">
               <label for="firstName">First Name</label>
               <input type="text" name="firstName" id="firstName" th:value="${contact.firstName}"
@@ -29,16 +30,6 @@
               <div th:each="e : ${#fields.errors('firstName')}" th:text="${e}"
                    class="invalid-feedback"></div>
             </div>
-            <!--                        <div class="form-group">-->
-            <!--                            <label for="name">User Name</label>-->
-            <!--                            <input type="text"-->
-            <!--                                   name="name" id="name" th:value="${user.name}"-->
-            <!--                                   class="form-control" placeholder="Enter name"-->
-            <!--                                   th:classappend="${#fields.hasErrors('name')}? 'is-invalid' : ''"-->
-            <!--                            >-->
-            <!--                            <div th:each="e : ${#fields.errors('name')}" th:text="${e}"-->
-            <!--                                 class="invalid-feedback"></div>-->
-            <!--                        </div>-->
             <div class="form-group">
               <label for="lastName">Last Name</label>
               <input type="text" name="lastName" id="lastName" th:value="${contact.lastName}"
@@ -75,6 +66,9 @@
               <div th:each="e : ${#fields.errors('work')}" th:text="${e}"
                    class="invalid-feedback"></div>
             </div>
+            <div class="container">
+              <img src="" style="height:100px;width:100px;" th:src="@{'/img/'+${contact.image}}"></img>
+            </div>
             <div class="form-group">
               <label for="image">Image</label>
               <input type="file" name="profileImage" id="image"
@@ -91,7 +85,7 @@
                         th:value="${contact.description}"
                         class="form-control" placeholder="Enter description"
                         th:classappend="${#fields.hasErrors('description')}? 'is-invalid' : ''"
-              ></textarea>
+              ><span th:text="${contact.description}"></span></textarea>
               <div th:each="e : ${#fields.errors('description')}" th:text="${e}"
                    class="invalid-feedback"></div>
             </div>

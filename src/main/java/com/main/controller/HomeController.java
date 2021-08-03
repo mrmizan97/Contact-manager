@@ -4,6 +4,7 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,6 +17,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.main.entities.User;
 import com.main.helper.Message;
 import com.main.dao.UserRepository;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
 @Controller
 public class HomeController {
@@ -45,9 +53,10 @@ public class HomeController {
     }
 
     @PostMapping("/signup")
-    public String singupUser(@Valid @ModelAttribute("user") User user, BindingResult bindingResult,
-                             @RequestParam(value = "agreement", defaultValue = "false") boolean agreement, Model model,
-                             HttpSession httpSession) {
+    public String singupUser(@Valid @ModelAttribute("user") User user, Model model,
+                             @RequestParam("profileImage")  MultipartFile file,
+                             BindingResult bindingResult,  @RequestParam(value = "agreement",
+            defaultValue = "false") boolean agreement, HttpSession httpSession) {
         try {
             if (!agreement) {
 //                System.out.println("You have not agreed the terms and condition");
@@ -57,6 +66,16 @@ public class HomeController {
                 System.out.println("ERROR" + bindingResult.toString());
                 model.addAttribute("user", user);
                 return "signup";
+            }
+            if (file.isEmpty()) {
+                user.setImage("default.jpg");
+            } else {
+                // upload file
+                user.setImage(file.getOriginalFilename());
+                File saveFile = new ClassPathResource("static/img").getFile();
+                Path path = Paths.get(saveFile.getAbsolutePath() + File.separator + file.getOriginalFilename());
+                Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+//                System.out.println("Image is uploaded...");
             }
             user.setRole("ROLE_USER");
             user.setEnabled(true);
@@ -74,7 +93,6 @@ public class HomeController {
             model.addAttribute("user", user);
             httpSession.setAttribute("message", new Message("Something went wrong." + e.getMessage(), "alert-danger"));
             return "signup";
-
         }
     }
 // custom login
