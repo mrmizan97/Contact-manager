@@ -24,6 +24,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.Random;
 
 @Controller
 public class HomeController {
@@ -32,6 +33,7 @@ public class HomeController {
 
     @Autowired
     private UserRepository userRepository;
+    Random random = new Random(1000);
 
     @GetMapping("/")
     public String home(Model model) {
@@ -49,7 +51,7 @@ public class HomeController {
     public String signup(Model model) {
         model.addAttribute("user", new User());
         model.addAttribute("title", "Signup - Smart Contact Manager.");
-        return "signup";
+        return "auth/signup";
     }
 
     @PostMapping("/signup")
@@ -98,10 +100,25 @@ public class HomeController {
 // custom login
     @GetMapping("/signin")
     public String customLogin(Model model){
-        model.addAttribute("title","Signin here.");
-        return "signin";
-    }@GetMapping("/signin-fail")
-    public String signinFail(){
-        return "/signinFail";
+        model.addAttribute("title","Signin - Smart Contact Manager.");
+        return "auth/signin";
     }
+    @GetMapping("/signin-fail")
+    public String signinFail(){
+        return "auth/signinFail";
+    }
+    @GetMapping("/forgot-password")
+    public String forgotPassword(Model model){
+        model.addAttribute("title","Input email - Smart Contact Manager.");
+        return "auth/inputEmail";
+    } @PostMapping("/send-otp")
+    public String sendOtp(@RequestParam("email") String email, Model model){
+        model.addAttribute("title","Input OTP- Smart Contact Manager.");
+        // generate 4 digit otp
+        int otp = random.nextInt(9999);
+
+        return "auth/inputOtp";
+    }
+
+
 }

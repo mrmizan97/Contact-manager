@@ -13,5 +13,5 @@ import java.util.List;
 public interface ContactRepository extends JpaRepository<Contact,Integer> {
     @Query("from Contact as c where c.user.id=:userId order by id desc")
     public Page<Contact> findContactsByUser(@Param("userId") int userId, Pageable pageable);
-    public List<Contact> findByNameOrEmailContainingAndUser(String name,String email, User user);
+    public List<Contact> findByFirstNameContainingAndUser(String firstName, User user);
 }

@@ -71,12 +71,16 @@ object-fit:covered;
 }
 .search_container{
 position:relative;
-}.search_result{
+}
+.search_result{
 position:absolute;
 background:white;
 width:100%;
 padding:5px;
 border:1px solid gray;
 display:none;
+}
+.active{
+background:#EEEEEE;
 }
 

@@ -14,7 +14,8 @@
         </div>
         <div class="card-body" >
             <div class="container text-center">
-                <img src="" style="height:200px; width:300px;" th:src="@{'/img/'+${user.image}}"></img>
+
+                <img src="" style="height:200px; width:300px;" th:src="@{'/img/'+${contact.image}}"></img>
                 <div>
                     <a class="btn btn-warning btn-sm"  href="#" th:href="@{'/user/contact/edit/'+${contact.id}}">Edit</a>
 <!--                    <a class="btn btn-danger btn-sm" onclick="confirm('Are you sure to delete this??')" href="#" th:href="@{'/user/contact/delete/'+${contact.id}}">Delete</a>-->

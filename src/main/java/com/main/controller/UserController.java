@@ -6,6 +6,7 @@ import com.main.dao.UserRepository;
 import com.main.helper.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -27,6 +28,8 @@ import java.util.Optional;
 public class UserController {
     @Autowired
     private  UserRepository userRepository;
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
     @ModelAttribute
     public void commonData(Model model, Principal principal) {
         String username = principal.getName();
@@ -35,7 +38,7 @@ public class UserController {
         model.addAttribute("user", user);
     }
 
-    @GetMapping("profile/index")
+    @GetMapping("profile/view")
     public String userProfile(Model model){
         model.addAttribute("title","Your profile");
         return  "user/profile/view";
@@ -83,6 +86,33 @@ public class UserController {
             httpSession.setAttribute("message", new Message("Something went wrong." + e.getMessage(), "danger"));
         }
         return  "user/profile/view";
+    }
+    @GetMapping("settings")
+    public  String getSetting(Model model){
+        model.addAttribute("title","Settings");
+        return "user/settings/setting";
+    } @PostMapping("change/password")
+    public  String changePassword(
+            @RequestParam("currentPassword") String currentPassword,
+            @RequestParam("newPassword") String newPassword,
+            @RequestParam("confirmPassword") String confirmPassword,
+                                  HttpSession session,Principal principal){
+        String userName = principal.getName();
+        User currentUser = this.userRepository.getUserByUserName(userName);
+
+        if (!this.bCryptPasswordEncoder.matches(currentPassword,currentUser.getPassword())){
+            session.setAttribute("message",new Message("Current Password does not match.","error"));
+        }
+       else {
+           if (!newPassword.equals(confirmPassword)){
+               session.setAttribute("message",new Message("New Password does not match with confirm password.","error"));
+
+           }else {
+            currentUser.setPassword(this.bCryptPasswordEncoder.encode(newPassword));
+            this.userRepository.save(currentUser);
+            session.setAttribute("message",new Message("Password changed.","success"));
+        }}
+        return "user/settings/setting";
     }
 
 }

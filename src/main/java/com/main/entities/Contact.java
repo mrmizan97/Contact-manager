@@ -27,6 +27,7 @@ public class Contact {
 	private String description;
 	
 	@ManyToOne
+	@JsonIgnore
 	private User user;
 
 	public int getId() {

@@ -30,15 +30,18 @@
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ml-auto text-uppercase">
-                <li class="nav-item active"><a class="nav-link" href="#" th:href="@{/}">Home
-                    <span class="sr-only">(current)</span>
-                </a></li>
-                <li class="nav-item"><a class="nav-link" href="#" th:href="@{/about}">About</a></li>
+<!--                <a th:classappend="${#request.getRequestURI() == '/user/dashboard' ? 'active' : ''}" th:href="@{/user/dashboard}" class="item"><i class="fas fa-home"></i> Home</a>-->
 
-                <li class="nav-item"><a class="nav-link " href="#" th:href="@{/signin}"
+                <li class="nav-item">
+                    <a class="nav-link" th:classappend="${#request.getRequestURI() == '/' ? 'active' : ''}" href="#" th:href="@{/}">Home
+<!--                    <span class="sr-only">(current)</span>-->
+                </a></li>
+                <li class="nav-item"><a class="nav-link" th:classappend="${#request.getRequestURI() == '/about' ? 'active' : ''}"  href="#" th:href="@{/about}">About</a></li>
+
+                <li class="nav-item"><a class="nav-link" th:classappend="${#request.getRequestURI() == '/signin' ? 'active' : ''}"  href="#" th:href="@{/signin}"
                                         tabindex="-1" aria-disabled="true">Signin</a></li>
 
-                <li class="nav-item"><a class="nav-link " href="#" th:href="@{/signup}"
+                <li class="nav-item"><a class="nav-link" th:classappend="${#request.getRequestURI() == '/signup' ? 'active' : ''}" href="#" th:href="@{/signup}"
                                         tabindex="-1" aria-disabled="true">Signup</a></li>
             </ul>
 
