@@ -4,10 +4,16 @@ public class Message {
 
 	private String content;
 	private String type;
+	private String alert;
 	public Message(String content, String type) {
 		super();
 		this.content = content;
 		this.type = type;
+	}public Message(String content, String type, String alert) {
+		super();
+		this.content = content;
+		this.type = type;
+		this.alert = alert;
 	}
 	public Message() {
 		super();
@@ -25,5 +31,12 @@ public class Message {
 	public void setType(String type) {
 		this.type = type;
 	}
-	
+
+	public String getAlert() {
+		return alert;
+	}
+
+	public void setAlert(String alert) {
+		this.alert = alert;
+	}
 }

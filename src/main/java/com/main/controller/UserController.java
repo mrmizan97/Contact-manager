@@ -101,16 +101,16 @@ public class UserController {
         User currentUser = this.userRepository.getUserByUserName(userName);
 
         if (!this.bCryptPasswordEncoder.matches(currentPassword,currentUser.getPassword())){
-            session.setAttribute("message",new Message("Current Password does not match.","error"));
+            session.setAttribute("message",new Message("Current Password does not match.","error","Error"));
         }
        else {
            if (!newPassword.equals(confirmPassword)){
-               session.setAttribute("message",new Message("New Password does not match with confirm password.","error"));
+               session.setAttribute("message",new Message("New Password does not match with confirm password.","error","Error"));
 
            }else {
             currentUser.setPassword(this.bCryptPasswordEncoder.encode(newPassword));
             this.userRepository.save(currentUser);
-            session.setAttribute("message",new Message("Password changed.","success"));
+            session.setAttribute("message",new Message("Password changed.","success","Success"));
         }}
         return "user/settings/setting";
     }

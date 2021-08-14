@@ -101,11 +101,11 @@ public class ContactController {
             user.getContacts().add(contact);
             contact.setUser(user);
             this.userRepository.save(user);
-            session.setAttribute("message", new Message("Data added.", "success"));
+            session.setAttribute("message", new Message("Data added.", "success","Success"));
         } catch (Exception e) {
             System.out.println("ERROR " + e.getMessage());
             e.printStackTrace();
-            session.setAttribute("message", new Message("Something went wrong.", "danger"));
+            session.setAttribute("message", new Message("Something went wrong.", "danger","Error"));
         }
         return "redirect:/user/contact/index/0";
     }
@@ -132,7 +132,7 @@ public class ContactController {
         if (user.getId() == contact.getUser().getId()) {
             model.addAttribute("contact", contact);
         } else {
-            session.setAttribute("message", new Message("You don't have permission to delete this.", "danger"));
+            session.setAttribute("message", new Message("You don't have permission to delete this.", "danger","Error"));
             return "redirect:/user/contact/index/0";
         }
         return "user/contact/edit";
@@ -146,6 +146,13 @@ public class ContactController {
             if (!file.isEmpty()){
                 // delete old photo
                 File oldPhoto = new ClassPathResource("static/img").getFile();
+                if (oldPhoto==null){
+                    // update new photo
+                    File saveFile = new ClassPathResource("static/img").getFile();
+                    Path path = Paths.get(saveFile.getAbsolutePath() + File.separator + file.getOriginalFilename());
+                    Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+                    contact.setImage(file.getOriginalFilename());
+                }
                 File deleteFile = new File(oldPhoto, oldContact.getImage());
                 deleteFile.delete();
                 // update new photo
@@ -160,11 +167,11 @@ public class ContactController {
             User user = this.userRepository.getUserByUserName(name);
             contact.setUser(user);
             this.contactRepository.save(contact);
-            session.setAttribute("message", new Message("Data updated.", "success"));
+            session.setAttribute("message", new Message("Data updated.", "success","Success"));
         }catch (Exception e){
             System.out.println("ERROR"+e.getMessage());
             e.printStackTrace();
-            session.setAttribute("message", new Message("Something went wrong.", "danger"));
+            session.setAttribute("message", new Message("Something went wrong.", "danger","Error"));
         }
         return "redirect:/user/contact/index/0";
     }
@@ -181,9 +188,9 @@ public class ContactController {
             deleteFile.delete();
             this.contactRepository.delete(contact);
             contact.setUser(null);
-            session.setAttribute("message", new Message("Data deleted.", "success"));
+            session.setAttribute("message", new Message("Data deleted.", "success" ,"Success"));
         } else {
-            session.setAttribute("message", new Message("You don't have permission to delete this.", "danger"));
+            session.setAttribute("message", new Message("You don't have permission to delete this.", "danger","Error"));
         }
         return "redirect:/user/contact/index/0";
     }
