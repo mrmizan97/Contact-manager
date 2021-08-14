@@ -67,7 +67,7 @@
     <!--         message start-->
     <div th:if="${session.message}" class="container">
         <div  th:classappend="${'alert-'+session.message.type}" class="alert  alert-dismissible fade show text-center" role="alert">
-<!--            <strong> <span th:text="${session.message.type}"></span>!</strong> -->
+            <strong> <span th:text="${session.message.alert}"></span>!</strong>
             <span th:text="${session.message.content}"></span>
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
